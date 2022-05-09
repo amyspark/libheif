@@ -118,6 +118,23 @@ else ()
     message("AVIF decoder, dav1d: not found")
 endif ()
 
+if (MINGW OR MSVC)
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("""
+#include <fstream>
+#include <string>
+int main()
+{
+const wchar_t* s=L\"wide string\";
+const std::ifstream t(s, std::ios_base::binary);
+return 0;
+}
+""" SUPPORTS_WSTREAM)
+endif()
+
+if(SUPPORTS_WSTREAM)
+    add_compile_definitions(-DSUPPORTS_WSTREAM)
+endif()
 
 # Create libheif pkgconfig file
 set(prefix ${CMAKE_INSTALL_PREFIX})

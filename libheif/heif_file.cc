@@ -60,7 +60,7 @@ std::vector<heif_item_id> HeifFile::get_item_IDs() const
 
 Error HeifFile::read_from_file(const char* input_filename)
 {
-#if defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
+#if defined(SUPPORTS_WSTREAM)
   auto input_stream_istr = std::unique_ptr<std::istream>(new std::ifstream(convert_utf8_path_to_utf16(input_filename).c_str(), std::ios_base::binary));
 #else
   auto input_stream_istr = std::unique_ptr<std::istream>(new std::ifstream(input_filename, std::ios_base::binary));
@@ -870,7 +870,7 @@ void HeifFile::set_hdlr_library_info(const std::string& encoder_plugin_version)
 }
 
 
-#if defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
+#if defined(SUPPORTS_WSTREAM)
 std::wstring HeifFile::convert_utf8_path_to_utf16(std::string str)
 {
   std::wstring ret;
